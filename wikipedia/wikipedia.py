@@ -18,13 +18,13 @@ RATE_LIMIT = False
 RATE_LIMIT_MIN_WAIT = None
 RATE_LIMIT_LAST_CALL = None
 USER_AGENT = 'wikipedia (https://github.com/goldsmith/Wikipedia/)'
-print(os.getenv('WIKI_HTTP_PROXY'))
+
 WIKI_REQUEST_PROXY = os.getenv('WIKI_HTTP_PROXY')
 if WIKI_REQUEST_PROXY:
   WIKI_REQUEST_PROXY = {"http": WIKI_REQUEST_PROXY, "https": WIKI_REQUEST_PROXY}
 else:
   WIKI_REQUEST_PROXY = None
-print(WIKI_REQUEST_PROXY)
+
 
 
 def set_lang(prefix):
