@@ -11,12 +11,20 @@ from .exceptions import (
   WikipediaException, ODD_ERROR_MESSAGE)
 from .util import cache, stdout_encode, debug
 import re
+import os
 
 API_URL = 'http://en.wikipedia.org/w/api.php'
 RATE_LIMIT = False
 RATE_LIMIT_MIN_WAIT = None
 RATE_LIMIT_LAST_CALL = None
 USER_AGENT = 'wikipedia (https://github.com/goldsmith/Wikipedia/)'
+print(os.getenv('WIKI_HTTP_PROXY'))
+WIKI_REQUEST_PROXY = os.getenv('WIKI_HTTP_PROXY')
+if WIKI_REQUEST_PROXY:
+  WIKI_REQUEST_PROXY = {"http": WIKI_REQUEST_PROXY, "https": WIKI_REQUEST_PROXY}
+else:
+  WIKI_REQUEST_PROXY = None
+print(WIKI_REQUEST_PROXY)
 
 
 def set_lang(prefix):
@@ -735,7 +743,7 @@ def _wiki_request(params):
     wait_time = (RATE_LIMIT_LAST_CALL + RATE_LIMIT_MIN_WAIT) - datetime.now()
     time.sleep(int(wait_time.total_seconds()))
 
-  r = requests.get(API_URL, params=params, headers=headers)
+  r = requests.get(API_URL, params=params, headers=headers, proxies=WIKI_REQUEST_PROXY)
 
   if RATE_LIMIT:
     RATE_LIMIT_LAST_CALL = datetime.now()
